@@ -1,0 +1,79 @@
+.. vim: ft=rst sts=2 sw=2 tw=70
+.. default-role:: literal
+
+======================================================================
+                               Chicory
+======================================================================
+----------------------------------------------------------------------
+  JavaScript Object Description Language for CoffeeScript / Node.js
+----------------------------------------------------------------------
+
+:Author: Roman Neuhauser
+:Contact: rneuhauser@suse.cz
+:Copyright: This document is in the public domain.
+
+.. This file is marked up using reStructuredText.
+   Lines beginning with ".." are reST directives.
+   "foo_" or "`foo bar`_" is a link, defined at ".. _foo" or
+   ".. _foo bar".
+   "::" introduces a literal block (usually some form of code).
+   "`foo`" is some kind of identifier.
+   Suspicious backslashes in the text ("`std::string`\s") are required
+   for reST to recognize the preceding character as syntax.
+
+.. contents::
+
+.. important links:
+
+.. _CoffeeScript: http://coffeescript.org/
+.. _Node.js: http://nodejs.org/
+.. _NPM: http://npmjs.org/
+.. _NPM Registry: http://search.npmjs.org/
+
+Overview
+========
+
+Chicory is an internal CoffeeScript DSL used to describe and assert
+object structure.
+
+License
+=======
+
+`Chicory` is covered by the MIT license.  See `LICENSE`.
+
+Status
+======
+
+`Chicory` is in early development.  Some basic matchers are
+implemented, the mismatch reporting is not yet very useful,
+and the interface may change.
+
+Prerequisities
+==============
+
+* CoffeeScript_ 1.3.3 or higher
+* `Node.js`_ 0.6.x or higher
+* NPM_ (any version appropriate for your version of Node.js)
+* several packages installable with `npm` (see package.json)
+
+
+Installation
+============
+
+`Chicory` will appear in the `NPM Registry`_ once it's ready.
+
+
+Hacking
+=======
+
+If you want to hack on `Chicory`: ::
+
+  git clone https://github.com/roman-neuhauser/chicory.git
+  cd chicory
+  coffee tests/tests.coffee
+  # happy hacking
+
+Documentation
+=============
+
+None yet.
