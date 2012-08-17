@@ -25,6 +25,8 @@ describe 'OfType Boolean', ->
     pass -> (OfType Boolean) new Boolean 42
 
   it 'rejects non-boolean values', ->
+    fail -> (OfType Boolean) 'true'
+    fail -> (OfType Boolean) 'false'
     fail -> (OfType Boolean) 42
     fail -> (OfType Boolean) {}
     fail -> (OfType Boolean) []
