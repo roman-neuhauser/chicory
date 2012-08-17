@@ -7,7 +7,7 @@ MOCHA ?=	mocha -C --compilers t.coffee:coffee-script
 RST2HTML ?=	$(call first_in_path,rst2html.py rst2html)
 
 htmlfiles =	README.html
-testfiles =	$$(find tests/ -name \*.t.coffee | sort) \
+testfiles =	$$(find tests/ -name \*.t.coffee | sort)
 
 html: $(htmlfiles)
 
@@ -18,7 +18,7 @@ check:
 	npm test
 
 do-check:
-	$(COFFEE) $(testfiles)
+	$(MOCHA) $(testfiles)
 
 define first_in_path
   $(firstword $(wildcard \

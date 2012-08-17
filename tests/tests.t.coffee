@@ -2,127 +2,205 @@ assert = require 'assert'
 require '../lib/chicory'
 
 pass = (expr) ->
-  try
-    expr()
-  catch e
-    console.log e
-    console.log expr.toString()
+  expr()
 
 fail = (expr) ->
   try
     expr()
+    throw new Error "#{expr.toString()} succeeded"
   catch e
     return if e instanceof assert.AssertionError
-    console.log e
-  console.log "#{expr.toString()} succeeded"
+    throw e
 
-pass ->  OfType Boolean
-pass -> (OfType Boolean) true
-pass -> (OfType Boolean) false
-pass -> (OfType Boolean) Boolean 42
-pass -> (OfType Boolean) new Boolean 42
+describe 'OfType Boolean', ->
+  it 'is constructible', ->
+    pass -> OfType Boolean
 
-fail -> (OfType Boolean) 42
-fail -> (OfType Boolean) {}
-fail -> (OfType Boolean) []
-fail -> (OfType Boolean) ()->
-fail -> (OfType Boolean) 'foo'
+  it 'admits bare booleans', ->
+    pass -> (OfType Boolean) true
+    pass -> (OfType Boolean) false
+    pass -> (OfType Boolean) Boolean 42
 
-pass ->  OfType Number
-pass -> (OfType Number) 0
-pass -> (OfType Number) 0.1
-pass -> (OfType Number) 0xff
-pass -> (OfType Number) new Number 0xff
+  it 'admits Boolean instances', ->
+    pass -> (OfType Boolean) new Boolean 42
 
-fail -> (OfType Number) 'foo'
-fail -> (OfType Number) false
-fail -> (OfType Number) {}
+  it 'rejects non-boolean values', ->
+    fail -> (OfType Boolean) 42
+    fail -> (OfType Boolean) {}
+    fail -> (OfType Boolean) []
+    fail -> (OfType Boolean) ()->
+    fail -> (OfType Boolean) 'foo'
 
-pass ->  OfType String
-pass -> (OfType String) ''
-pass -> (OfType String) 'foo'
-pass -> (OfType String) new String 'foo'
+describe 'OfType Number', ->
+  it 'is constructible', ->
+    pass ->  OfType Number
 
-fail -> (OfType String) false
-fail -> (OfType String) 0
-fail -> (OfType String) {}
+  it 'admits bare numbers', ->
+    pass -> (OfType Number) 0
+    pass -> (OfType Number) 0.1
+    pass -> (OfType Number) 0xff
 
-pass ->  OfType RegExp
-pass -> (OfType RegExp) //
-pass -> (OfType RegExp) new RegExp '//'
+  it 'admits Number instances', ->
+    pass -> (OfType Number) new Number 0xff
 
-fail -> (OfType RegExp) false
-fail -> (OfType RegExp) 0
-fail -> (OfType RegExp) {}
-fail -> (OfType RegExp) ''
+  it 'rejects non-number values', ->
+    fail -> (OfType Number) 'foo'
+    fail -> (OfType Number) false
+    fail -> (OfType Number) {}
 
-pass ->  OfType Array
-pass -> (OfType Array) []
-pass -> (OfType Array) [1..3]
+describe 'OfType String', ->
+  it 'is constructible', ->
+    pass ->  OfType String
 
-fail -> (OfType Array) false
-fail -> (OfType Array) 0
-fail -> (OfType Array) {}
-fail -> (OfType Array) ''
+  it 'admits bare strings', ->
+    pass -> (OfType String) ''
+    pass -> (OfType String) 'foo'
 
-pass -> YesNo true
-pass -> YesNo false
-pass -> YesNo Boolean 42
-pass -> YesNo new Boolean 42
+  it 'admits String instances', ->
+    pass -> (OfType String) new String 'foo'
 
-fail -> YesNo 42
-fail -> YesNo {}
-fail -> YesNo []
-fail -> YesNo ()->
-fail -> YesNo 'foo'
+  it 'rejects non-string values', ->
+    fail -> (OfType String) false
+    fail -> (OfType String) 0
+    fail -> (OfType String) {}
 
-pass ->  OneOf [42, 'foo', undefined]
-pass -> (OneOf [42, 'foo', undefined]) 42
-pass -> (OneOf [42, 'foo', undefined]) 'foo'
-pass -> (OneOf [42, 'foo', undefined]) undefined
+describe 'OfType RegExp', ->
+  it 'is constructible', ->
+    pass ->  OfType RegExp
 
-fail -> (OneOf [42, 'foo', undefined]) null
-fail -> (OneOf [42, 'foo', null])      undefined
-fail -> (OneOf [42, 'foo', undefined]) 40
-fail -> (OneOf [42, 'foo', undefined]) 'FOO'
-fail -> (OneOf [42, 'foo', undefined]) ''
+  it 'admits bare regexps', ->
+    pass -> (OfType RegExp) //
 
-pass -> (OneOf 42, 'foo', undefined) 42
-pass -> (OneOf 42, 'foo', undefined) 'foo'
-pass -> (OneOf 42, 'foo', undefined) undefined
+  it 'admits RegExp instances', ->
+    pass -> (OfType RegExp) new RegExp '//'
 
-fail -> (OneOf 42, 'foo') undefined
+  it 'rejects non-regexp values', ->
+    fail -> (OfType RegExp) false
+    fail -> (OfType RegExp) 0
+    fail -> (OfType RegExp) {}
+    fail -> (OfType RegExp) ''
 
-pass -> Integer 0
-pass -> Integer 42
-fail -> Integer 0.1
-fail -> Integer 0.01
-fail -> Integer 42.1
-fail -> Integer 42.01
+describe 'OfType Array', ->
+  it 'is constructible', ->
+    pass ->  OfType Array
 
-pass -> (Nonnegative Integer) 0
-pass -> (Nonnegative Integer) 10
+  it 'admits bare arrays', ->
+    pass -> (OfType Array) []
+    pass -> (OfType Array) [1..3]
 
-fail -> (Nonnegative Integer) 1.1
-fail -> (Nonnegative Integer) -1
-fail -> (Nonnegative Integer) -0.1
+  it 'admits Array instances', ->
+    pass -> (OfType Array) new Array
 
-pass ->  OneOf YesNo, TrueFalse
-pass -> (OneOf YesNo, TrueFalse) yes
-pass -> (OneOf YesNo, TrueFalse) no
-pass -> (OneOf YesNo, TrueFalse) 'true'
-pass -> (OneOf YesNo, TrueFalse) 'false'
+  it 'rejects non-array values', ->
+    fail -> (OfType Array) false
+    fail -> (OfType Array) 0
+    fail -> (OfType Array) {}
+    fail -> (OfType Array) ''
 
-fail -> (OneOf YesNo, TrueFalse) 'yes'
-fail -> (OneOf YesNo, TrueFalse) 'no'
-fail -> (OneOf YesNo, TrueFalse) 0
-fail -> (OneOf YesNo, TrueFalse) 1
+describe 'YesNo', ->
+  it 'admits bare booleans', ->
+    pass -> YesNo true
+    pass -> YesNo false
 
-pass ->  OneOf (OneOf YesNo, TrueFalse), Integer
-pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) yes
-pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 'true'
-pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 42
-pass -> (OneOf (OneOf YesNo, TrueFalse), Nonnegative Integer) 42
+  it 'admits Boolean instances', ->
+    pass -> YesNo Boolean 42
+    pass -> YesNo new Boolean 42
+
+  it 'rejects non-boolean values', ->
+    fail -> YesNo 42
+    fail -> YesNo {}
+    fail -> YesNo []
+    fail -> YesNo ()->
+    fail -> YesNo 'foo'
+
+describe 'OneOf with array', ->
+  it 'is constructible', ->
+    pass ->  OneOf [42, 'foo', undefined]
+
+  it 'admits values contained in the array', ->
+    pass -> (OneOf [42, 'foo', undefined]) 42
+    pass -> (OneOf [42, 'foo', undefined]) 'foo'
+    pass -> (OneOf [42, 'foo', undefined]) undefined
+
+  it 'rejects values not contained in the array', ->
+    fail -> (OneOf [42, 'foo', undefined]) null
+    fail -> (OneOf [42, 'foo', null])      undefined
+    fail -> (OneOf [42, 'foo', undefined]) 40
+    fail -> (OneOf [42, 'foo', undefined]) 'FOO'
+    fail -> (OneOf [42, 'foo', undefined]) ''
+
+describe 'OneOf with arguments', ->
+  it 'is constructible', ->
+    pass ->  OneOf 42, 'foo', undefined
+
+  it 'admits values given in arguments', ->
+    pass -> (OneOf 42, 'foo', undefined) 42
+    pass -> (OneOf 42, 'foo', undefined) 'foo'
+    pass -> (OneOf 42, 'foo', undefined) undefined
+
+  it 'rejects values not given in arguments', ->
+    fail -> (OneOf 42, 'foo') undefined
+
+describe 'Integer', ->
+  it 'admits bare whole-number values', ->
+    pass -> Integer -42
+    pass -> Integer 0
+    pass -> Integer 42
+
+  it 'admits whole-number Number instances', ->
+    pass -> Integer new Number -42
+    pass -> Integer new Number 0
+    pass -> Integer new Number 42
+
+  it 'rejects real numbers', ->
+    fail -> Integer 0.1
+    fail -> Integer -0.01
+    fail -> Integer 42.1
+    fail -> Integer -42.01
+
+    fail -> Integer new Number 0.1
+    fail -> Integer new Number -0.01
+    fail -> Integer new Number 42.1
+    fail -> Integer new Number -42.01
+
+describe 'Nonnegative Integer', ->
+  it 'is constructible', ->
+    pass ->  Nonnegative Integer
+
+  it 'admits nonnegative integers', ->
+    pass -> (Nonnegative Integer) 0
+    pass -> (Nonnegative Integer) 10
+    pass -> (Nonnegative Integer) new Number 0
+    pass -> (Nonnegative Integer) new Number 10
+
+  it 'rejects reals, negative numbers', ->
+    fail -> (Nonnegative Integer) 1.1
+    fail -> (Nonnegative Integer) -1
+    fail -> (Nonnegative Integer) -0.1
+
+describe 'OneOf nesting other matchers', ->
+  it 'is constructible to first level', ->
+    pass ->  OneOf YesNo, TrueFalse
+
+  it 'works on first level', ->
+    pass -> (OneOf YesNo, TrueFalse) yes
+    pass -> (OneOf YesNo, TrueFalse) no
+    pass -> (OneOf YesNo, TrueFalse) 'true'
+    pass -> (OneOf YesNo, TrueFalse) 'false'
+
+    fail -> (OneOf YesNo, TrueFalse) 'yes'
+    fail -> (OneOf YesNo, TrueFalse) 'no'
+    fail -> (OneOf YesNo, TrueFalse) 0
+    fail -> (OneOf YesNo, TrueFalse) 1
+
+  it 'is constructible to second level', ->
+    pass ->  OneOf (OneOf YesNo, TrueFalse), Integer
+
+  it 'works on second level', ->
+    pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) yes
+    pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 'true'
+    pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 42
+    pass -> (OneOf (OneOf YesNo, TrueFalse), Nonnegative Integer) 42
 
 o = (spec) ->
   return Match spec if spec instanceof RegExp
