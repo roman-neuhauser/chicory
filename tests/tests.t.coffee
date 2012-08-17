@@ -114,6 +114,8 @@ describe 'YesNo', ->
     pass -> YesNo new Boolean 42
 
   it 'rejects non-boolean values', ->
+    fail -> YesNo 'false'
+    fail -> YesNo 'true'
     fail -> YesNo 42
     fail -> YesNo {}
     fail -> YesNo []
