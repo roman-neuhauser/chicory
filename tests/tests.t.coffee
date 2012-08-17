@@ -45,6 +45,11 @@ describe 'OfType Number', ->
   it 'admits Number instances', ->
     pass -> (OfType Number) new Number 0xff
 
+  it 'rejects numeric strings', ->
+    fail -> (OfType Number) '0'
+    fail -> (OfType Number) '10'
+    fail -> (OfType Number) '-10'
+
   it 'rejects non-number values', ->
     fail -> (OfType Number) 'foo'
     fail -> (OfType Number) false
