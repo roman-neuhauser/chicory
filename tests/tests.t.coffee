@@ -172,6 +172,12 @@ describe 'Integer', ->
     fail -> Integer new Number 42.1
     fail -> Integer new Number -42.01
 
+  it 'rejects numeric strings', ->
+    fail -> Integer '0'
+    fail -> Integer '4.2'
+    fail -> Integer '10'
+    fail -> Integer '-10'
+
 describe 'Nonnegative Integer', ->
   it 'is constructible', ->
     pass ->  Nonnegative Integer
@@ -210,6 +216,16 @@ describe 'OneOf nesting other matchers', ->
     pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 'true'
     pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 42
     pass -> (OneOf (OneOf YesNo, TrueFalse), Nonnegative Integer) 42
+
+describe 'Integer, nonthrowing', ->
+  id = (v) -> v
+  it 'is false for non-numbers', ->
+    assert false == (Integer 'hello', id)
+    assert false == (Integer ['hello'], id)
+  it 'is false for real numbers', ->
+    assert false == (Integer 1.1, id)
+  it 'is true for whole numbers', ->
+    assert true == (Integer 11, id)
 
 o = (spec) ->
   return Match spec if spec instanceof RegExp

@@ -80,7 +80,7 @@ global.OneOf = (accepted...) ->
 global.TrueFalse = OneOf 'true', 'false'
 
 global.Integer = (value, check = assert) ->
-  check (value - Math.round value) is 0
+  ((OfType Number) value, check) and (check (value - Math.round value) is 0)
 
 global.Nonnegative = (Type) ->
   (value, check = assert) ->
