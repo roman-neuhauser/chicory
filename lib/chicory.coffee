@@ -34,9 +34,19 @@ example = ->
 
 
 assert = require 'assert'
-raise = (args...) ->
-  assert args...
-  true
+util = require 'util'
+
+class Mismatch
+  name: "Mismatch"
+  constructor: (@message) ->
+
+exports.Mismatch = Mismatch
+
+raise = (expr) ->
+  unless expr
+    throw new Mismatch expr
+  else
+    true
 
 id = (value) -> value
 

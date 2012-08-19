@@ -1,5 +1,5 @@
 assert = require 'assert'
-require '../lib/chicory'
+chicory = require '../lib/chicory'
 
 pass = (expr) ->
   expr()
@@ -9,7 +9,7 @@ fail = (expr) ->
     expr()
     throw new Error "#{expr.toString()} succeeded"
   catch e
-    return if e instanceof assert.AssertionError
+    return if e instanceof chicory.Mismatch
     throw e
 
 describe 'OfType Boolean', ->
