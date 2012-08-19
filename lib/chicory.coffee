@@ -52,7 +52,7 @@ id = (value) -> value
 
 global.Matches = (re) ->
   (value, check = raise) ->
-    check re.test value
+    ((OfType String) value, check) and (check re.test value)
 
 global.OfType = (type) ->
   if type is Boolean

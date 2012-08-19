@@ -227,13 +227,50 @@ describe 'Integer, nonthrowing', ->
   it 'is true for whole numbers', ->
     assert true == (Integer 11, id)
 
+describe 'Matches with bare regexps', ->
+  it 'is constructible', ->
+    pass ->  Matches /^foo$/
+
+  it 'admits matching bare strings', ->
+    pass -> (Matches /^foo$/) 'foo'
+
+  it 'admits matching string instances', ->
+    pass -> (Matches /^foo$/) new String 'foo'
+
+  it 'rejects non-matching strings', ->
+    fail -> (Matches /^foo$/) 'bar'
+
+  it 'rejects non-strings', ->
+    fail -> (Matches /^foo$/) 42
+    fail -> (Matches /^foo$/) foo: 'foo'
+    fail -> (Matches /^foo$/) ['foo']
+    fail -> (Matches /^foo$/) undefined
+    fail -> (Matches /^foo$/) true
+
+describe 'Matches with RegExp instances', ->
+  it 'is constructible', ->
+    pass ->  Matches new RegExp /^foo$/
+
+  it 'admits matching bare strings', ->
+    pass -> (Matches new RegExp /^foo$/) 'foo'
+
+  it 'admits matching string instances', ->
+    pass -> (Matches new RegExp /^foo$/) new String 'foo'
+
+  it 'rejects non-matching strings', ->
+    fail -> (Matches new RegExp /^foo$/) 'bar'
+
+  it 'rejects non-strings', ->
+    fail -> (Matches new RegExp /^foo$/) 42
+    fail -> (Matches new RegExp /^foo$/) foo: 'foo'
+    fail -> (Matches new RegExp /^foo$/) ['foo']
+    fail -> (Matches new RegExp /^foo$/) undefined
+    fail -> (Matches new RegExp /^foo$/) true
+
 o = (spec) ->
   return Matches spec if spec instanceof RegExp
   return spec if typeof spec in ['function', 'object']
   assert 0, 'WTF!!!'
-
-pass -> (Matches /^foo$/) 'foo'
-fail -> (Matches /^foo$/) 'bar'
 
 match = (spec, object) ->
   for p, m of spec
