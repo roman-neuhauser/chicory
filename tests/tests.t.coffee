@@ -228,12 +228,12 @@ describe 'Integer, nonthrowing', ->
     assert true == (Integer 11, id)
 
 o = (spec) ->
-  return Match spec if spec instanceof RegExp
+  return Matches spec if spec instanceof RegExp
   return spec if typeof spec in ['function', 'object']
   assert 0, 'WTF!!!'
 
-pass -> (Match /^foo$/) 'foo'
-fail -> (Match /^foo$/) 'bar'
+pass -> (Matches /^foo$/) 'foo'
+fail -> (Matches /^foo$/) 'bar'
 
 match = (spec, object) ->
   for p, m of spec

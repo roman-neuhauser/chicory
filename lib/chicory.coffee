@@ -50,7 +50,7 @@ raise = (expr) ->
 
 id = (value) -> value
 
-global.Match = (re) ->
+global.Matches = (re) ->
   (value, check = raise) ->
     check re.test value
 
