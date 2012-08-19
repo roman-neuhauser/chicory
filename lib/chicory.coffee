@@ -33,35 +33,32 @@ example = ->
   YesNo               =o  TypeOf Boolean
 
 
-massert = require 'assert'
-assert = (args...) ->
-  massert args...
-  true
-assert.fail = (args...) ->
-  massert.fail args...
+assert = require 'assert'
+raise = (args...) ->
+  assert args...
   true
 
 id = (value) -> value
 
 global.Match = (re) ->
-  (value, check = assert) ->
+  (value, check = raise) ->
     check re.test value
 
 global.OfType = (type) ->
   if type is Boolean
-    (value, check = assert) ->
+    (value, check = raise) ->
       check typeof value is 'boolean' or value instanceof Boolean
   else if type is Number
-    (value, check = assert) ->
+    (value, check = raise) ->
       check typeof value is 'number' or value instanceof Number
   else if type is String
-    (value, check = assert) ->
+    (value, check = raise) ->
       check typeof value is 'string' or value instanceof String
   else if type is Array
-    (value, check = assert) ->
+    (value, check = raise) ->
       check value instanceof Array
   else if type is RegExp
-    (value, check = assert) ->
+    (value, check = raise) ->
       check value instanceof RegExp
   else
     assert.fail "OfType #{type} not implemented"
@@ -71,7 +68,7 @@ global.YesNo = OfType Boolean
 global.OneOf = (accepted...) ->
   if accepted.length is 1 and accepted[0] instanceof Array
     accepted = accepted[0]
-  (value, check = assert) ->
+  (value, check = raise) ->
     for match in accepted
       return true if value is match
       return true if typeof match is 'function' and match value, id
@@ -79,13 +76,13 @@ global.OneOf = (accepted...) ->
 
 global.TrueFalse = OneOf 'true', 'false'
 
-global.Integer = (value, check = assert) ->
+global.Integer = (value, check = raise) ->
   ((OfType Number) value, check) and (check (value - Math.round value) is 0)
 
 global.Nonnegative = (Type) ->
-  (value, check = assert) ->
+  (value, check = raise) ->
     return (Type value, check) and (check value >= 0)
 
 global.Optional = (Type) ->
-  (value, check = assert) ->
+  (value, check = raise) ->
     typeof value is 'undefined' or Type value, check
