@@ -1,16 +1,17 @@
 assert = require 'assert'
+expect = (require 'chai').expect
 chicory = require '../lib/chicory'
 
-pass = (expr) ->
-  expr()
+fstr = (fun) ->
+  fun.toString().replace \
+    /^function \(\) \{[\S\s]+?return\s+([\S\s]+);[\S\s]+$/
+  , '$1'
 
-fail = (expr) ->
-  try
-    expr()
-    throw new Error "#{expr.toString()} succeeded"
-  catch e
-    return if e instanceof chicory.Mismatch
-    throw e
+pass = (fun) ->
+  (expect fun, (fstr fun)).to.not.throw()
+
+fail = (fun) ->
+  (expect fun, (fstr fun)).to.throw chicory.Mismatch
 
 describe 'OfType Boolean', ->
   it 'is constructible', ->
@@ -220,12 +221,12 @@ describe 'OneOf nesting other matchers', ->
 describe 'Integer, nonthrowing', ->
   id = (v) -> v
   it 'is false for non-numbers', ->
-    assert false == (Integer 'hello', id)
-    assert false == (Integer ['hello'], id)
+    (expect Integer 'hello', id).to.be.false
+    (expect Integer ['hello'], id).to.be.false
   it 'is false for real numbers', ->
-    assert false == (Integer 1.1, id)
+    (expect Integer 1.1, id).to.be.false
   it 'is true for whole numbers', ->
-    assert true == (Integer 11, id)
+    (expect Integer 11, id).to.be.true
 
 describe 'Matches with bare regexps', ->
   it 'is constructible', ->
