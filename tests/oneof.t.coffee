@@ -1,54 +1,59 @@
 require './tools'
 
-describe 'OneOf with array', ->
-  it 'is constructible', ->
-    construct -> OneOf [42, 'foo', undefined]
+test (check, pass, fail, mode) ->
 
-  it 'admits values contained in the array', ->
-    pass -> (OneOf [42, 'foo', undefined]) 42
-    pass -> (OneOf [42, 'foo', undefined]) 'foo'
-    pass -> (OneOf [42, 'foo', undefined]) undefined
+  describe "OneOf with array (#{mode})", ->
 
-  it 'rejects values not contained in the array', ->
-    fail -> (OneOf [42, 'foo', undefined]) null
-    fail -> (OneOf [42, 'foo', null])      undefined
-    fail -> (OneOf [42, 'foo', undefined]) 40
-    fail -> (OneOf [42, 'foo', undefined]) 'FOO'
-    fail -> (OneOf [42, 'foo', undefined]) ''
+    it 'is constructible', ->
+      construct -> OneOf [42, 'foo', undefined]
 
-describe 'OneOf with arguments', ->
-  it 'is constructible', ->
-    construct -> OneOf 42, 'foo', undefined
+    it 'admits values contained in the array', ->
+      pass -> (OneOf [42, 'foo', undefined]) 42, check
+      pass -> (OneOf [42, 'foo', undefined]) 'foo', check
+      pass -> (OneOf [42, 'foo', undefined]) undefined, check
 
-  it 'admits values given in arguments', ->
-    pass -> (OneOf 42, 'foo', undefined) 42
-    pass -> (OneOf 42, 'foo', undefined) 'foo'
-    pass -> (OneOf 42, 'foo', undefined) undefined
+    it 'rejects values not contained in the array', ->
+      fail -> (OneOf [42, 'foo', undefined]) null, check
+      fail -> (OneOf [42, 'foo', null])      undefined, check
+      fail -> (OneOf [42, 'foo', undefined]) 40, check
+      fail -> (OneOf [42, 'foo', undefined]) 'FOO', check
+      fail -> (OneOf [42, 'foo', undefined]) '', check
 
-  it 'rejects values not given in arguments', ->
-    fail -> (OneOf 42, 'foo') undefined
+  describe "OneOf with arguments (#{mode})", ->
 
-describe 'OneOf nesting other matchers', ->
-  it 'is constructible to first level', ->
-    construct -> OneOf YesNo, TrueFalse
+    it 'is constructible', ->
+      construct -> OneOf 42, 'foo', undefined
 
-  it 'works on first level', ->
-    pass -> (OneOf YesNo, TrueFalse) yes
-    pass -> (OneOf YesNo, TrueFalse) no
-    pass -> (OneOf YesNo, TrueFalse) 'true'
-    pass -> (OneOf YesNo, TrueFalse) 'false'
+    it 'admits values given in arguments', ->
+      pass -> (OneOf 42, 'foo', undefined) 42, check
+      pass -> (OneOf 42, 'foo', undefined) 'foo', check
+      pass -> (OneOf 42, 'foo', undefined) undefined, check
 
-    fail -> (OneOf YesNo, TrueFalse) 'yes'
-    fail -> (OneOf YesNo, TrueFalse) 'no'
-    fail -> (OneOf YesNo, TrueFalse) 0
-    fail -> (OneOf YesNo, TrueFalse) 1
+    it 'rejects values not given in arguments', ->
+      fail -> (OneOf 42, 'foo') undefined, check
 
-  it 'is constructible to second level', ->
-    construct -> OneOf (OneOf YesNo, TrueFalse), Integer
+  describe "OneOf nesting other matchers (#{mode})", ->
 
-  it 'works on second level', ->
-    pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) yes
-    pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 'true'
-    pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 42
-    pass -> (OneOf (OneOf YesNo, TrueFalse), Nonnegative Integer) 42
+    it 'is constructible to first level', ->
+      construct -> OneOf YesNo, TrueFalse
+
+    it 'works on first level', ->
+      pass -> (OneOf YesNo, TrueFalse) yes, check
+      pass -> (OneOf YesNo, TrueFalse) no, check
+      pass -> (OneOf YesNo, TrueFalse) 'true', check
+      pass -> (OneOf YesNo, TrueFalse) 'false', check
+
+      fail -> (OneOf YesNo, TrueFalse) 'yes', check
+      fail -> (OneOf YesNo, TrueFalse) 'no', check
+      fail -> (OneOf YesNo, TrueFalse) 0, check
+      fail -> (OneOf YesNo, TrueFalse) 1, check
+
+    it 'is constructible to second level', ->
+      construct -> OneOf (OneOf YesNo, TrueFalse), Integer
+
+    it 'works on second level', ->
+      pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) yes, check
+      pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 'true', check
+      pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) 42, check
+      pass -> (OneOf (OneOf YesNo, TrueFalse), Nonnegative Integer) 42, check
 

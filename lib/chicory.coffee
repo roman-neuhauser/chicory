@@ -42,13 +42,13 @@ class Mismatch
 
 exports.Mismatch = Mismatch
 
-raise = (expr) ->
+exports.raise = raise = (expr) ->
   unless expr
     throw new Mismatch expr
   else
     true
 
-id = (value) -> value
+exports.value = id = (value) -> value
 
 global.Matches = (re) ->
   (value, check = raise) ->

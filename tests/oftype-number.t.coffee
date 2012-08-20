@@ -1,24 +1,26 @@
 require './tools'
 
-describe 'OfType Number', ->
-  it 'is constructible', ->
-    construct -> OfType Number
+test (check, pass, fail, mode) ->
 
-  it 'admits bare numbers', ->
-    pass -> (OfType Number) 0
-    pass -> (OfType Number) 0.1
-    pass -> (OfType Number) 0xff
+  describe "OfType Number (#{mode})", ->
+    it 'is constructible', ->
+      construct -> OfType Number
 
-  it 'admits Number instances', ->
-    pass -> (OfType Number) new Number 0xff
+    it 'admits bare numbers', ->
+      pass -> (OfType Number) 0, check
+      pass -> (OfType Number) 0.1, check
+      pass -> (OfType Number) 0xff, check
 
-  it 'rejects numeric strings', ->
-    fail -> (OfType Number) '0'
-    fail -> (OfType Number) '10'
-    fail -> (OfType Number) '-10'
+    it 'admits Number instances', ->
+      pass -> (OfType Number) new Number 0xff, check
 
-  it 'rejects non-number values', ->
-    fail -> (OfType Number) 'foo'
-    fail -> (OfType Number) false
-    fail -> (OfType Number) {}
+    it 'rejects numeric strings', ->
+      fail -> (OfType Number) '0', check
+      fail -> (OfType Number) '10', check
+      fail -> (OfType Number) '-10', check
+
+    it 'rejects non-number values', ->
+      fail -> (OfType Number) 'foo', check
+      fail -> (OfType Number) false, check
+      fail -> (OfType Number) {}, check
 

@@ -1,42 +1,44 @@
 require './tools'
 
-describe 'Matches with bare regexps', ->
-  it 'is constructible', ->
-    construct -> Matches /^foo$/
+test (check, pass, fail, mode) ->
 
-  it 'admits matching bare strings', ->
-    pass -> (Matches /^foo$/) 'foo'
+  describe "Matches with bare regexps (#{mode})", ->
+    it 'is constructible', ->
+      construct -> Matches /^foo$/
 
-  it 'admits matching string instances', ->
-    pass -> (Matches /^foo$/) new String 'foo'
+    it 'admits matching bare strings', ->
+      pass -> (Matches /^foo$/) 'foo', check
 
-  it 'rejects non-matching strings', ->
-    fail -> (Matches /^foo$/) 'bar'
+    it 'admits matching string instances', ->
+      pass -> (Matches /^foo$/) (new String 'foo'), check
 
-  it 'rejects non-strings', ->
-    fail -> (Matches /^foo$/) 42
-    fail -> (Matches /^foo$/) foo: 'foo'
-    fail -> (Matches /^foo$/) ['foo']
-    fail -> (Matches /^foo$/) undefined
-    fail -> (Matches /^foo$/) true
+    it 'rejects non-matching strings', ->
+      fail -> (Matches /^foo$/) 'bar', check
 
-describe 'Matches with RegExp instances', ->
-  it 'is constructible', ->
-    construct -> Matches new RegExp /^foo$/
+    it 'rejects non-strings', ->
+      fail -> (Matches /^foo$/) 42, check
+      fail -> (Matches /^foo$/) foo: 'foo', check
+      fail -> (Matches /^foo$/) ['foo'], check
+      fail -> (Matches /^foo$/) undefined, check
+      fail -> (Matches /^foo$/) true, check
 
-  it 'admits matching bare strings', ->
-    pass -> (Matches new RegExp /^foo$/) 'foo'
+  describe "Matches with RegExp instances (#{mode})", ->
+    it 'is constructible', ->
+      construct -> Matches (new RegExp /^foo$/), check
 
-  it 'admits matching string instances', ->
-    pass -> (Matches new RegExp /^foo$/) new String 'foo'
+    it 'admits matching bare strings', ->
+      pass -> (Matches new RegExp /^foo$/) 'foo', check
 
-  it 'rejects non-matching strings', ->
-    fail -> (Matches new RegExp /^foo$/) 'bar'
+    it 'admits matching string instances', ->
+      pass -> (Matches new RegExp /^foo$/) (new String 'foo'), check
 
-  it 'rejects non-strings', ->
-    fail -> (Matches new RegExp /^foo$/) 42
-    fail -> (Matches new RegExp /^foo$/) foo: 'foo'
-    fail -> (Matches new RegExp /^foo$/) ['foo']
-    fail -> (Matches new RegExp /^foo$/) undefined
-    fail -> (Matches new RegExp /^foo$/) true
+    it 'rejects non-matching strings', ->
+      fail -> (Matches new RegExp /^foo$/) 'bar', check
+
+    it 'rejects non-strings', ->
+      fail -> (Matches new RegExp /^foo$/) 42, check
+      fail -> (Matches new RegExp /^foo$/) foo: 'foo', check
+      fail -> (Matches new RegExp /^foo$/) ['foo'], check
+      fail -> (Matches new RegExp /^foo$/) undefined, check
+      fail -> (Matches new RegExp /^foo$/) true, check
 

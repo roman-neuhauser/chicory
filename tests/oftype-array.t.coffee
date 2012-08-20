@@ -1,19 +1,21 @@
 require './tools'
 
-describe 'OfType Array', ->
-  it 'is constructible', ->
-    construct -> OfType Array
+test (check, pass, fail, mode) ->
 
-  it 'admits bare arrays', ->
-    pass -> (OfType Array) []
-    pass -> (OfType Array) [1..3]
+  describe "OfType Array (#{mode})", ->
+    it 'is constructible', ->
+      construct -> OfType Array
 
-  it 'admits Array instances', ->
-    pass -> (OfType Array) new Array
+    it 'admits bare arrays', ->
+      pass -> (OfType Array) [], check
+      pass -> (OfType Array) [1..3], check
 
-  it 'rejects non-array values', ->
-    fail -> (OfType Array) false
-    fail -> (OfType Array) 0
-    fail -> (OfType Array) {}
-    fail -> (OfType Array) ''
+    it 'admits Array instances', ->
+      pass -> (OfType Array) new Array, check
+
+    it 'rejects non-array values', ->
+      fail -> (OfType Array) false, check
+      fail -> (OfType Array) 0, check
+      fail -> (OfType Array) {}, check
+      fail -> (OfType Array) '', check
 

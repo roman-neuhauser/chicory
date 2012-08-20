@@ -1,20 +1,23 @@
 require './tools'
 
-describe 'YesNo', ->
-  it 'admits bare booleans', ->
-    pass -> YesNo true
-    pass -> YesNo false
+test (check, pass, fail, mode) ->
 
-  it 'admits Boolean instances', ->
-    pass -> YesNo Boolean 42
-    pass -> YesNo new Boolean 42
+  describe "YesNo (#{mode})", ->
 
-  it 'rejects non-boolean values', ->
-    fail -> YesNo 'false'
-    fail -> YesNo 'true'
-    fail -> YesNo 42
-    fail -> YesNo {}
-    fail -> YesNo []
-    fail -> YesNo ()->
-    fail -> YesNo 'foo'
+    it 'admits bare booleans', ->
+      pass -> YesNo true, check
+      pass -> YesNo false, check
+
+    it 'admits Boolean instances', ->
+      pass -> YesNo (Boolean 42), check
+      pass -> YesNo (new Boolean 42), check
+
+    it 'rejects non-boolean values', ->
+      fail -> YesNo 'false', check
+      fail -> YesNo 'true', check
+      fail -> YesNo 42, check
+      fail -> YesNo {}, check
+      fail -> YesNo [], check
+      fail -> YesNo (->), check
+      fail -> YesNo 'foo', check
 

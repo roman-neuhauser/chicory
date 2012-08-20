@@ -1,18 +1,20 @@
 require './tools'
 
-describe 'OfType RegExp', ->
-  it 'is constructible', ->
-    construct -> OfType RegExp
+test (check, pass, fail, mode) ->
 
-  it 'admits bare regexps', ->
-    pass -> (OfType RegExp) //
+  describe "OfType RegExp (#{mode})", ->
+    it 'is constructible', ->
+      construct -> OfType RegExp
 
-  it 'admits RegExp instances', ->
-    pass -> (OfType RegExp) new RegExp '//'
+    it 'admits bare regexps', ->
+      pass -> (OfType RegExp) //, check
 
-  it 'rejects non-regexp values', ->
-    fail -> (OfType RegExp) false
-    fail -> (OfType RegExp) 0
-    fail -> (OfType RegExp) {}
-    fail -> (OfType RegExp) ''
+    it 'admits RegExp instances', ->
+      pass -> (OfType RegExp) (new RegExp '//'), check
+
+    it 'rejects non-regexp values', ->
+      fail -> (OfType RegExp) false, check
+      fail -> (OfType RegExp) 0, check
+      fail -> (OfType RegExp) {}, check
+      fail -> (OfType RegExp) '', check
 

@@ -1,18 +1,21 @@
 require './tools'
 
-describe 'OfType String', ->
-  it 'is constructible', ->
-    construct -> OfType String
+test (check, pass, fail, mode) ->
 
-  it 'admits bare strings', ->
-    pass -> (OfType String) ''
-    pass -> (OfType String) 'foo'
+  describe 'OfType String', ->
 
-  it 'admits String instances', ->
-    pass -> (OfType String) new String 'foo'
+    it 'is constructible', ->
+      construct -> OfType String
 
-  it 'rejects non-string values', ->
-    fail -> (OfType String) false
-    fail -> (OfType String) 0
-    fail -> (OfType String) {}
+    it 'admits bare strings', ->
+      pass -> (OfType String) '', check
+      pass -> (OfType String) 'foo', check
+
+    it 'admits String instances', ->
+      pass -> (OfType String) (new String 'foo'), check
+
+    it 'rejects non-string values', ->
+      fail -> (OfType String) false, check
+      fail -> (OfType String) 0, check
+      fail -> (OfType String) {}, check
 
