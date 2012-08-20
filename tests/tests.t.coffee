@@ -7,6 +7,10 @@ fstr = (fun) ->
     /^function \(\) \{[\S\s]+?return\s+([\S\s]+);[\S\s]+$/
   , '$1'
 
+construct = (fun) ->
+  (expect fun, (fstr fun)).to.not.throw()
+  (expect fun(), (fstr fun)).to.be.a('function')
+
 pass = (fun) ->
   (expect fun, (fstr fun)).to.not.throw()
 
@@ -15,7 +19,7 @@ fail = (fun) ->
 
 describe 'OfType Boolean', ->
   it 'is constructible', ->
-    pass -> OfType Boolean
+    construct -> OfType Boolean
 
   it 'admits bare booleans', ->
     pass -> (OfType Boolean) true
@@ -36,7 +40,7 @@ describe 'OfType Boolean', ->
 
 describe 'OfType Number', ->
   it 'is constructible', ->
-    pass ->  OfType Number
+    construct -> OfType Number
 
   it 'admits bare numbers', ->
     pass -> (OfType Number) 0
@@ -58,7 +62,7 @@ describe 'OfType Number', ->
 
 describe 'OfType String', ->
   it 'is constructible', ->
-    pass ->  OfType String
+    construct -> OfType String
 
   it 'admits bare strings', ->
     pass -> (OfType String) ''
@@ -74,7 +78,7 @@ describe 'OfType String', ->
 
 describe 'OfType RegExp', ->
   it 'is constructible', ->
-    pass ->  OfType RegExp
+    construct -> OfType RegExp
 
   it 'admits bare regexps', ->
     pass -> (OfType RegExp) //
@@ -90,7 +94,7 @@ describe 'OfType RegExp', ->
 
 describe 'OfType Array', ->
   it 'is constructible', ->
-    pass ->  OfType Array
+    construct -> OfType Array
 
   it 'admits bare arrays', ->
     pass -> (OfType Array) []
@@ -125,7 +129,7 @@ describe 'YesNo', ->
 
 describe 'OneOf with array', ->
   it 'is constructible', ->
-    pass ->  OneOf [42, 'foo', undefined]
+    construct -> OneOf [42, 'foo', undefined]
 
   it 'admits values contained in the array', ->
     pass -> (OneOf [42, 'foo', undefined]) 42
@@ -141,7 +145,7 @@ describe 'OneOf with array', ->
 
 describe 'OneOf with arguments', ->
   it 'is constructible', ->
-    pass ->  OneOf 42, 'foo', undefined
+    construct -> OneOf 42, 'foo', undefined
 
   it 'admits values given in arguments', ->
     pass -> (OneOf 42, 'foo', undefined) 42
@@ -181,7 +185,7 @@ describe 'Integer', ->
 
 describe 'Nonnegative Integer', ->
   it 'is constructible', ->
-    pass ->  Nonnegative Integer
+    construct -> Nonnegative Integer
 
   it 'admits nonnegative integers', ->
     pass -> (Nonnegative Integer) 0
@@ -196,7 +200,7 @@ describe 'Nonnegative Integer', ->
 
 describe 'OneOf nesting other matchers', ->
   it 'is constructible to first level', ->
-    pass ->  OneOf YesNo, TrueFalse
+    construct -> OneOf YesNo, TrueFalse
 
   it 'works on first level', ->
     pass -> (OneOf YesNo, TrueFalse) yes
@@ -210,7 +214,7 @@ describe 'OneOf nesting other matchers', ->
     fail -> (OneOf YesNo, TrueFalse) 1
 
   it 'is constructible to second level', ->
-    pass ->  OneOf (OneOf YesNo, TrueFalse), Integer
+    construct -> OneOf (OneOf YesNo, TrueFalse), Integer
 
   it 'works on second level', ->
     pass -> (OneOf (OneOf YesNo, TrueFalse), Integer) yes
@@ -230,7 +234,7 @@ describe 'Integer, nonthrowing', ->
 
 describe 'Matches with bare regexps', ->
   it 'is constructible', ->
-    pass ->  Matches /^foo$/
+    construct -> Matches /^foo$/
 
   it 'admits matching bare strings', ->
     pass -> (Matches /^foo$/) 'foo'
@@ -250,7 +254,7 @@ describe 'Matches with bare regexps', ->
 
 describe 'Matches with RegExp instances', ->
   it 'is constructible', ->
-    pass ->  Matches new RegExp /^foo$/
+    construct -> Matches new RegExp /^foo$/
 
   it 'admits matching bare strings', ->
     pass -> (Matches new RegExp /^foo$/) 'foo'
