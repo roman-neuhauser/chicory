@@ -31,19 +31,3 @@ test (check, pass, fail, mode) ->
       fail -> Integer '10', check
       fail -> Integer '-10', check
 
-  describe "Nonnegative Integer (#{mode})", ->
-
-    it 'is constructible', ->
-      construct -> Nonnegative Integer
-
-    it 'admits nonnegative integers', ->
-      pass -> (Nonnegative Integer) 0, check
-      pass -> (Nonnegative Integer) 10, check
-      pass -> (Nonnegative Integer) (new Number 0), check
-      pass -> (Nonnegative Integer) (new Number 10), check
-
-    it 'rejects reals, negative numbers', ->
-      fail -> (Nonnegative Integer) 1.1, check
-      fail -> (Nonnegative Integer) -1, check
-      fail -> (Nonnegative Integer) -0.1, check
-
