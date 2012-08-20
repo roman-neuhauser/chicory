@@ -14,7 +14,7 @@ match = (spec, object) ->
     else
       match m, object[p]
 
-pass ->
+nothrow ->
   x =o
     o: Optional YesNo
     n: OfType Number
