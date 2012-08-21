@@ -1,11 +1,8 @@
-example = ->
+Desirables = ->
 
-  Decimal             =o  /^\d+\.\d+/
-  Percent             =o  /^\d+%/
-  Id                  =o  Nonnegative Integer
-  Count               =o  Nonnegative Integer
-  Seconds             =o  Nonnegative Integer
-  IP                  =o  (v) ->
+  # this lists some of the things i want to implement eventually
+
+  IPv4Address         =o  (v) ->
     r = v.match /^(\d{1,3})\.(\d{1,3})\.(\d{1,3}).(\d{1,3})$/
     Fail unless r and r[4]
     for b in r[1..]
@@ -14,23 +11,12 @@ example = ->
   Host                =o  OneOf IP, Hostname
   Port                =o  Interval 1, 65536 + 1
   HostPort            =o  "#{Host}:#{Port}"
-  Envname             =o  OneOf 'development', 'production', 'testing'
-  Hex32               =o  /^[a-f0-9]{32}$/i
-  Hex40               =o  /^[a-f0-9]{40}$/i
   Timestamp           =o  /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/
   EmailAddress        =o  /^.+@.+$/
-  String              =o  /.*/
   URL                 =o  /^https?:\/\/.+$/
   Version             =o  /^\d+\.\d+\.\d+$/
-  MBytes              =o  Nonnegative Integer
   LocalPath           =o  /^(?:\/[^/]+)+/
-  TrueFalse           =o  OneOf 'true', 'false'
-  Username            =o  /^[-\w]+$/
-  Groupname           =o  /^[-\w]+$/
   Basename            =o  /^[^/]+$/
-  RunLevel            =o  OneOf [1..5]
-  OnOff               =o  TypeOf Boolean
-  YesNo               =o  TypeOf Boolean
 
 
 assert = require 'assert'
