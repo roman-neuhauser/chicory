@@ -12,7 +12,7 @@ example = ->
       Fail if b < 1 or b > 254
   Hostname            =o  /^[a-z]+[-a-z]*[a-z](:?\.[a-z]+[-a-z]*[a-z])*$/
   Host                =o  OneOf IP, Hostname
-  Port                =o  OneOf Interval 1, 65536 + 1
+  Port                =o  Interval 1, 65536 + 1
   HostPort            =o  "#{Host}:#{Port}"
   Envname             =o  OneOf 'development', 'production', 'testing'
   Hex32               =o  /^[a-f0-9]{32}$/i
