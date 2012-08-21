@@ -89,6 +89,13 @@ global.TrueFalse = OneOf 'true', 'false'
 global.Integer = (value, check = raise) ->
   ((OfType Number) value, check) and (check (value - Math.round value) is 0)
 
+global.Interval = (lo, hi) ->
+  [lo, hi] = lo unless hi?
+  (value, check = raise) ->
+    ((OfType Number) value, check) and
+    (check value >= lo) and
+    (check value < hi)
+
 global.Nonnegative = (Type) ->
   (value, check = raise) ->
     return (Type value, check) and (check value >= 0)
