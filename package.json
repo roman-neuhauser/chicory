@@ -12,9 +12,24 @@
 , "main": "lib/chicory.coffee"
 , "files": [
     "GNUmakefile"
+  , "LICENSE"
   , "README.rest"
+
   , "lib/chicory.coffee"
-  , "tests/tests.coffee"
+
+  , "tests/integer.t.coffee"
+  , "tests/interval.t.coffee"
+  , "tests/matches.t.coffee"
+  , "tests/nonnegative.t.coffee"
+  , "tests/oftype-array.t.coffee"
+  , "tests/oftype-boolean.t.coffee"
+  , "tests/oftype-number.t.coffee"
+  , "tests/oftype-regexp.t.coffee"
+  , "tests/oftype-string.t.coffee"
+  , "tests/oneof.t.coffee"
+  , "tests/tools.coffee"
+  , "tests/wip.t.coffee"
+  , "tests/yesno.t.coffee"
   ]
 , "scripts": {
     "test": "make do-check"
