@@ -13,8 +13,18 @@ match = (spec, object) ->
       m object[p]
     else
       match m, object[p]
+  true
 
-nothrow ->
+exact = (spec, object) ->
+  if not match spec, object
+    false
+  else
+    for p of object
+      if p not of spec
+        return false
+    true
+
+istrue ->
   x =o
     o: Optional YesNo
     n: OfType Number
