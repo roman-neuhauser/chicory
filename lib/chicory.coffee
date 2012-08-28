@@ -2,11 +2,6 @@ Desirables = ->
 
   # this lists some of the things i want to implement eventually
 
-  IPv4Address         =o  (v) ->
-    r = v.match /^(\d{1,3})\.(\d{1,3})\.(\d{1,3}).(\d{1,3})$/
-    Fail unless r and r[4]
-    for b in r[1..]
-      Fail if b < 1 or b > 254
   Hostname            =o  /^[a-z]+[-a-z]*[a-z](:?\.[a-z]+[-a-z]*[a-z])*$/
   Host                =o  OneOf IP, Hostname
   Port                =o  Interval 1, 65536 + 1
@@ -35,6 +30,16 @@ exports.raise = raise = (expr) ->
     true
 
 exports.value = id = (value) -> value
+
+global.IPv4Host = (value, check = chicory.raise) ->
+
+  re = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/
+  ok = (b, low = 0) -> low <= b < 255
+
+  return false unless (OfType String) value, check
+  m = re.exec value
+  return false unless check m
+  return check ((ok m[1], 1) and (ok m[2]) and (ok m[3]) and (ok m[4], 1))
 
 global.Matches = (re) ->
   (value, check = raise) ->
