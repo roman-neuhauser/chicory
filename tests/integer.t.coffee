@@ -2,28 +2,26 @@ require './tools'
 
 test (check, pass, fail, mode) ->
 
+  success = (msg, ctor) ->
+    it msg, ->
+      pass -> Integer (ctor -42), check
+      pass -> Integer (ctor 0), check
+      pass -> Integer (ctor 42), check
+
+  failure = (msg, ctor) ->
+    it msg, ->
+      fail -> Integer (ctor 0.1), check
+      fail -> Integer (ctor -0.01), check
+      fail -> Integer (ctor 42.1), check
+      fail -> Integer (ctor -42.01), check
+
   describe "Integer (#{mode})", ->
 
-    it 'admits bare whole-number values', ->
-      pass -> Integer -42, check
-      pass -> Integer 0, check
-      pass -> Integer 42, check
+    success 'admits integer number primitives', (v) -> v
+    success 'admits integer Number instances', (v) -> new Number v
 
-    it 'admits whole-number Number instances', ->
-      pass -> Integer (new Number -42), check
-      pass -> Integer (new Number 0), check
-      pass -> Integer (new Number 42), check
-
-    it 'rejects real numbers', ->
-      fail -> Integer 0.1, check
-      fail -> Integer -0.01, check
-      fail -> Integer 42.1, check
-      fail -> Integer -42.01, check
-
-      fail -> Integer (new Number 0.1), check
-      fail -> Integer (new Number -0.01), check
-      fail -> Integer (new Number 42.1), check
-      fail -> Integer (new Number -42.01), check
+    failure 'rejects real number primitives', (v) -> v
+    failure 'rejects real Number instances', (v) -> new Number v
 
     it 'rejects numeric strings', ->
       fail -> Integer '0', check
