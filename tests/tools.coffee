@@ -1,6 +1,8 @@
 global.expect = (require 'chai').expect
 global.chicory = require '../lib/chicory'
 
+global[n] = m for n, m of chicory.matchers
+
 fstr = (fun) ->
   fun.toString().replace \
     /^function \(\) \{[\S\s]+?return\s+([\S\s]+);[\S\s]+$/

@@ -31,7 +31,9 @@ exports.raise = raise = (expr) ->
 
 exports.value = id = (value) -> value
 
-global.IPv4Host = (value, check = chicory.raise) ->
+exports.matchers = matchers = {}
+
+matchers.IPv4Host = IPv4Host = (value, check = chicory.raise) ->
 
   re = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/
   ok = (b, low = 0) -> low <= b < 255
@@ -41,11 +43,11 @@ global.IPv4Host = (value, check = chicory.raise) ->
   return false unless check m
   return check ((ok m[1], 1) and (ok m[2]) and (ok m[3]) and (ok m[4], 1))
 
-global.Matches = (re) ->
+matchers.Matches = Matches = (re) ->
   (value, check = raise) ->
     ((OfType String) value, check) and (check re.test value)
 
-global.OfType = (type) ->
+matchers.OfType = OfType = (type) ->
   if type is Boolean
     (value, check = raise) ->
       check typeof value is 'boolean' or value instanceof Boolean
@@ -64,9 +66,9 @@ global.OfType = (type) ->
   else
     assert.fail "OfType #{type} not implemented"
 
-global.YesNo = OfType Boolean
+matchers.YesNo = YesNo = OfType Boolean
 
-global.OneOf = (accepted...) ->
+matchers.OneOf = OneOf = (accepted...) ->
   if accepted.length is 1 and accepted[0] instanceof Array
     accepted = accepted[0]
   (value, check = raise) ->
@@ -75,22 +77,24 @@ global.OneOf = (accepted...) ->
       return true if typeof match is 'function' and match value, id
     check value in accepted
 
-global.TrueFalse = OneOf 'true', 'false'
+matchers.TrueFalse = TrueFalse = OneOf 'true', 'false'
 
-global.Integer = (value, check = raise) ->
+matchers.Integer = Integer = (value, check = raise) ->
   ((OfType Number) value, check) and (check (value - Math.round value) is 0)
 
-global.Interval = (lo, hi) ->
+matchers.Interval = Interval = (lo, hi) ->
   [lo, hi] = lo unless hi?
   (value, check = raise) ->
     ((OfType Number) value, check) and
     (check value >= lo) and
     (check value < hi)
 
-global.Nonnegative = (Type) ->
+matchers.Nonnegative = Nonnegative = (Type) ->
   (value, check = raise) ->
     return (Type value, check) and (check value >= 0)
 
-global.Optional = (Type) ->
+matchers.Optional = Optional = (Type) ->
   (value, check = raise) ->
     typeof value is 'undefined' or Type value, check
+
+exports[n] = m for n, m of matchers
