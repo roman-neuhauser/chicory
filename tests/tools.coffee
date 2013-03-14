@@ -1,7 +1,7 @@
 global.expect = (require 'chai').expect
-global.chicory = require '../lib/chicory'
+CUT = require '../lib/chicory'
 
-global[n] = m for n, m of chicory.matchers
+global[n] = m for n, m of CUT.matchers
 
 fstr = (fun) ->
   fun.toString().replace \
@@ -16,7 +16,7 @@ rpass = (fun) ->
   (expect fun, (fstr fun)).to.not.throw()
 
 rfail = (fun) ->
-  (expect fun, (fstr fun)).to.throw chicory.Mismatch
+  (expect fun, (fstr fun)).to.throw CUT.Mismatch
 
 vpass = (fun) ->
   (expect fun(), (fstr fun)).to.be.true
@@ -25,8 +25,8 @@ vfail = (fun) ->
   (expect fun(), (fstr fun)).to.be.false
 
 variants = [
-  [chicory.raise, rpass, rfail, 'throwing']
-, [chicory.value, vpass, vfail, 'using return values']
+  [null, rpass, rfail, 'throwing']
+, [CUT.value, vpass, vfail, 'using return values']
 ]
 
 global.nothrow = rpass

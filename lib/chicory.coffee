@@ -33,7 +33,7 @@ exports.value = id = (value) -> value
 
 exports.matchers = matchers = {}
 
-matchers.IPv4Host = IPv4Host = (value, check = chicory.raise) ->
+matchers.IPv4Host = IPv4Host = (value, check = raise) ->
 
   re = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/
   ok = (b, low = 0) -> low <= b < 255
