@@ -85,7 +85,7 @@ and the interface may change.
 Prerequisities
 ==============
 
-* CoffeeScript_ 1.3.3 or higher
+* CoffeeScript_ 1.4 or higher
 * `Node.js`_ 0.6.x or higher
 * NPM_ (any version appropriate for your version of Node.js)
 * several packages installable with `npm` (see package.json)
