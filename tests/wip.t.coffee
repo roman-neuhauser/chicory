@@ -7,8 +7,9 @@ o = (spec) ->
   return spec if typeof spec in ['function', 'object']
   assert 0, 'WTF!!!'
 
-match = (spec, object) ->
+match = (spec, object, verbose = 0) ->
   for p, m of spec
+    console.log "p=#{p}, m=#{m}, object[p]=#{object[p]}" if verbose
     if typeof m is 'function'
       m object[p]
     else
@@ -41,3 +42,10 @@ istrue ->
     orphan: 'lost'
   match x, y
 
+throws 'Mismatch', ->
+  x =o
+    a: OfType String
+  y =
+    b: 'in fact'
+
+  match x, y, 1

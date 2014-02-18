@@ -12,16 +12,20 @@ global.construct = (fun) ->
   (expect fun, (fstr fun)).to.not.throw()
   (expect fun(), (fstr fun)).to.be.a('function')
 
-rpass = (fun) ->
+rpass = (msg, fun) ->
+  [msg, fun] = [null, msg] unless fun?
   (expect fun, (fstr fun)).to.not.throw()
 
-rfail = (fun) ->
-  (expect fun, (fstr fun)).to.throw CUT.Mismatch
+rfail = (msg, fun) ->
+  [msg, fun] = [null, msg] unless fun?
+  (expect fun, (fstr fun)).to.throw (msg or CUT.Mismatch)
 
-vpass = (fun) ->
+vpass = (msg, fun) ->
+  [msg, fun] = [null, msg] unless fun?
   (expect fun(), (fstr fun)).to.be.true
 
-vfail = (fun) ->
+vfail = (msg, fun) ->
+  [msg, fun] = [null, msg] unless fun?
   (expect fun(), (fstr fun)).to.be.false
 
 variants = [
