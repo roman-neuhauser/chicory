@@ -17,9 +17,12 @@ Desirables = ->
 assert = require 'assert'
 util = require 'util'
 
-class Mismatch
-  name: "Mismatch"
-  constructor: (@message) ->
+Mismatch = (msg, constr = this) ->
+  Error.captureStackTrace this, constr
+  @message = msg or 'Error'
+
+util.inherits Mismatch, Error
+Mismatch.prototype.name = 'Mismatch'
 
 exports.Mismatch = Mismatch
 
