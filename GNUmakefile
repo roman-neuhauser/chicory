@@ -3,7 +3,7 @@
 # (npm adds <package_dir>/node_modules/.bin to $PATH)
 
 COFFEE ?=	coffee
-MOCHA ?=	mocha --compilers t.coffee:coffee-script
+MOCHA ?=	mocha --compilers t.coffee:coffee-script/register
 RST2HTML ?=	$(call first_in_path,rst2html.py rst2html)
 
 htmlfiles =	README.html

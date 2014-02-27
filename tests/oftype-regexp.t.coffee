@@ -7,7 +7,7 @@ test (check, pass, fail, mode) ->
       construct -> OfType RegExp
 
     it 'admits bare regexps', ->
-      pass -> (OfType RegExp) //, check
+      pass -> (OfType RegExp) /o/, check
 
     it 'admits RegExp instances', ->
       pass -> (OfType RegExp) (new RegExp '//'), check
